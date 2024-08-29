@@ -18,7 +18,7 @@ typedef struct{
     int total_head_movement;
     double avg_waiting_time;
     double throughput;
-    double std_dev_respnse_time;
+    double std_dev_response_time;
 } PerformanceMetrics;
 
 // Generating performance metrics
