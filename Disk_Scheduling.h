@@ -41,7 +41,7 @@ void clook_description();
 
 PerformanceMetrics calculate_metrics(DiskState* , int total_head_mov);
 // Function for ploting graph
-void plot_results(const char *algorithm_name, int *requests, int num_requests, int head_position, int total_head_movement);
+void plot_results(char *algorithm_name, char* output_file);
 
 // Function for random generation of inputs
 void generate_random_requests(DiskState *state, int num_requests);

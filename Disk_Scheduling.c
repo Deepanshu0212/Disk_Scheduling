@@ -33,7 +33,7 @@ PerformanceMetrics calculate_metrics(DiskState* state, int total_head_movement) 
     free(waiting_times);
     return metrics;
 }
-void generate_gnuplot_script(char* algorithm, char* output_file) {
+void plot_results(char* algorithm, char* output_file) {
     FILE *fp = fopen("disk_scheduling.plt", "w");
     if (fp == NULL) {
         printf("Error opening file!\n");
@@ -48,19 +48,24 @@ void generate_gnuplot_script(char* algorithm, char* output_file) {
     fprintf(fp, "set yrange [0:199]\n");
     fprintf(fp, "set grid ytics\n");
     fprintf(fp, "set ytic 50\n");
-    fprintf(fp, "total_movement = system('cat total_movement.txt')\n");
+    fprintf(fp, "total_movement = system('type total_movement.txt')\n");
     fprintf(fp, "set label sprintf('Total Movement: %%s', total_movement) at graph 0.02, graph 0.98 font ',10' tc rgb 'black'\n");
     fprintf(fp, "plot 'disk_scheduling.dat' with linespoints title 'Head Movement' lt rgb 'green' pt 7 ps 1\n");
 
+    fclose(fp);
+
 }
 
+
+
+// Fcfs algo...
 PerformanceMetrics fcfs(DiskState *state){
 
     FILE *fp = fopen("disk_scheduling.dat", "w");
-    if (fp == NULL) {
-        printf("Error opening file!\n");
-        return;
-    }
+    // if (fp == NULL) {
+    //     printf("Error opening file!\n");
+    //     return ;
+    // }
 
     int total_head_mov =0;
     int curr_pos = state->head_position;
@@ -70,7 +75,16 @@ PerformanceMetrics fcfs(DiskState *state){
         
         total_head_mov += abs(state->requests[i] - curr_pos);
         curr_pos = state->requests[i];
-        fprintf(fp, "%d %d\n", 0, curr_pos);
+        fprintf(fp, "%d %d\n", i+1, curr_pos);
+    }
+     
+
+    fclose(fp);
+    
+    fp = fopen("total_movement.txt", "w");
+    if (fp != NULL) {
+        fprintf(fp, "%d", total_head_mov);
+        fclose(fp);
     }
 
     return calculate_metrics(state , total_head_mov);
