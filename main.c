@@ -15,12 +15,12 @@ int main(){
         scanf("%d", &ds.requests[i]);
     }
 
-    PerformanceMetrics pf = fcfs(&ds);
+    PerformanceMetrics pf = sstf(&ds);
 
     printf("total_head_movement : %d" , pf.total_head_movement);
     printf(" avg_waiting_time : %f" , pf.avg_waiting_time);
 
-    plot_results("fcfs","disk_scheduling.png");
+    plot_results("sstf","disk_scheduling.png");
 
     system("gnuplot disk_scheduling.plt");
 

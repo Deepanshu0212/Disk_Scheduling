@@ -7,6 +7,10 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include <limits.h>
+
+#define MAX_REQUESTS 100
+#define MAX_CYLINDER 199
 
 typedef struct {
     int *requests;

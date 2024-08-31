@@ -89,3 +89,48 @@ PerformanceMetrics fcfs(DiskState *state){
 
     return calculate_metrics(state , total_head_mov);
 }
+
+
+// sstf Algo implementation...
+PerformanceMetrics sstf(DiskState *state){
+    FILE *fp = fopen("disk_scheduling.dat", "w");
+    
+
+    int visited[MAX_REQUESTS] = {0};
+    int current = state->head_position;
+    int total_head_mov = 0;
+    fprintf(fp, "%d %d\n", 0, current);
+
+    for (int i = 0; i < state->num_requests; i++) {
+        int min_distance = INT_MAX;
+        int next_request = -1;
+
+        for (int j = 0; j < state->num_requests; j++) {
+            if (!visited[j]) {
+                int distance = abs(state->requests[j] - current);
+                if (distance < min_distance) {
+                    min_distance = distance;
+                    next_request = j;
+                }
+            }
+        }
+
+        visited[next_request] = 1;
+        current = state->requests[next_request];
+        total_head_mov += min_distance;
+        fprintf(fp, "%d %d\n", i + 1, current);
+    }
+
+    fclose(fp);
+
+    // Save total movement to a separate file
+    fp = fopen("total_movement.txt", "w");
+    if (fp != NULL) {
+        fprintf(fp, "%d", total_head_mov);
+        fclose(fp);
+    }
+
+    
+    return calculate_metrics(state , total_head_mov);
+
+}
