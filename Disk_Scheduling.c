@@ -134,3 +134,76 @@ PerformanceMetrics sstf(DiskState *state){
     return calculate_metrics(state , total_head_mov);
 
 }
+
+
+// scan algo impl
+
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+PerformanceMetrics scan(DiskState *state) {
+    int total_head_movement = 0;
+    int current_position = state->head_position;
+    int direction = 1; // 1 for moving towards higher cylinder numbers
+    int *sorted_requests = malloc(state->num_requests * sizeof(int));
+    int visited[MAX_CYLINDER] = {0};  // Array to track visited positions
+
+    memcpy(sorted_requests, state->requests, state->num_requests * sizeof(int));
+
+    // Sort the requests array
+    qsort(sorted_requests, state->num_requests, sizeof(int), compare);
+
+    // Open a file to write the positions
+    FILE *file = fopen("disk_scheduling.dat", "w");
+    if (file == NULL) {
+        perror("Unable to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    // Write the initial head position to the file
+    fprintf(file, "0 %d\n", current_position);
+    visited[current_position] = 1;
+
+    // Find the first request greater than or equal to the current head position
+    int head_index = 0;
+    while (head_index < state->num_requests && sorted_requests[head_index] < current_position) {
+        head_index++;
+    }
+
+    // Process requests in the current direction
+    int i = head_index;
+    int request_number = 1;
+    while (1) {
+        if (i >= 0 && i < state->num_requests) {
+            if (!visited[sorted_requests[i]]) {
+                total_head_movement += abs(sorted_requests[i] - current_position);
+                current_position = sorted_requests[i];
+                // Write the new head position to the file with request number
+                fprintf(file, "%d %d\n", request_number, current_position);
+                visited[current_position] = 1;
+                request_number++;
+            }
+            i += direction;
+        } else {
+            // Change direction when we hit the end
+            direction *= -1;
+            i += direction; // Adjust index to stay within bounds
+            
+            // If we've changed direction twice, we're done
+            if (direction == 1) {
+                break;
+            }
+        }
+    }
+
+    free(sorted_requests);
+    fclose(file);
+
+    file = fopen("total_movement.txt", "w");
+    if (file != NULL) {
+        fprintf(file, "%d", total_head_movement);
+        fclose(file);
+    }
+    return calculate_metrics(state , total_head_movement);
+}

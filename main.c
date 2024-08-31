@@ -15,7 +15,7 @@ int main(){
         scanf("%d", &ds.requests[i]);
     }
 
-    PerformanceMetrics pf = sstf(&ds);
+    PerformanceMetrics pf = scan(&ds);
 
     printf("total_head_movement : %d" , pf.total_head_movement);
     printf(" avg_waiting_time : %f" , pf.avg_waiting_time);
