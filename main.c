@@ -15,14 +15,14 @@ int main(){
         scanf("%d", &ds.requests[i]);
     }
 
-    PerformanceMetrics pf = look(&ds);
+    PerformanceMetrics pf = clook(&ds);
 
     printf("total_head_movement : %d" , pf.total_head_movement);
     printf(" avg_waiting_time : %f" , pf.avg_waiting_time);
 
     plot_results("sstf","disk_scheduling.png");
 
-    system("gnuplot disk_scheduling.plt");
+    
 
     printf("Graph has been generated as disk_scheduling.png\n");
 
