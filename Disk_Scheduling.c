@@ -145,7 +145,6 @@ int compare(const void *a, const void *b) {
 PerformanceMetrics scan(DiskState *state) {
     int total_head_movement = 0;
     int current_position = state->head_position;
-    int direction = 1; // 1 for moving towards higher cylinder numbers
     int *sorted_requests = malloc(state->num_requests * sizeof(int));
     int visited[MAX_CYLINDER] = {0};  // Array to track visited positions
 
@@ -171,39 +170,130 @@ PerformanceMetrics scan(DiskState *state) {
         head_index++;
     }
 
-    // Process requests in the current direction
-    int i = head_index;
     int request_number = 1;
-    while (1) {
-        if (i >= 0 && i < state->num_requests) {
-            if (!visited[sorted_requests[i]]) {
-                total_head_movement += abs(sorted_requests[i] - current_position);
-                current_position = sorted_requests[i];
-                // Write the new head position to the file with request number
-                fprintf(file, "%d %d\n", request_number, current_position);
-                visited[current_position] = 1;
-                request_number++;
-            }
-            i += direction;
-        } else {
-            // Change direction when we hit the end
-            direction *= -1;
-            i += direction; // Adjust index to stay within bounds
-            
-            // If we've changed direction twice, we're done
-            if (direction == 1) {
-                break;
-            }
+
+    // Process requests in the upward direction (towards higher cylinder numbers)
+    for (int i = head_index; i < state->num_requests; i++) {
+        if (!visited[sorted_requests[i]]) {
+            total_head_movement += abs(sorted_requests[i] - current_position);
+            current_position = sorted_requests[i];
+            // Write the new head position to the file with request number
+            fprintf(file, "%d %d\n", request_number, current_position);
+            visited[current_position] = 1;
+            request_number++;
+        }
+    }
+
+    // Move the head to the maximum cylinder if it hasn't been done yet
+    if (current_position < MAX_CYLINDER - 1) {
+        total_head_movement += (MAX_CYLINDER - 1) - current_position;
+        current_position = MAX_CYLINDER - 1;
+        fprintf(file, "%d %d\n", request_number, current_position);
+        request_number++;
+    }
+
+    // Change direction and process requests in the downward direction
+    for (int i = head_index - 1; i >= 0; i--) {
+        if (!visited[sorted_requests[i]]) {
+            total_head_movement += abs(sorted_requests[i] - current_position);
+            current_position = sorted_requests[i];
+            // Write the new head position to the file with request number
+            fprintf(file, "%d %d\n", request_number, current_position);
+            visited[current_position] = 1;
+            request_number++;
         }
     }
 
     free(sorted_requests);
     fclose(file);
 
+    // Write the total head movement to a separate file
     file = fopen("total_movement.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d", total_head_movement);
         fclose(file);
     }
-    return calculate_metrics(state , total_head_movement);
+    return calculate_metrics(state, total_head_movement);
+}
+
+// Implementation of c-scan:
+
+PerformanceMetrics cscan(DiskState *state) {
+    int total_head_movement = 0;
+    int current_position = state->head_position;
+    int *sorted_requests = malloc(state->num_requests * sizeof(int));
+    int visited[MAX_CYLINDER] = {0};  // Array to track visited positions
+
+    memcpy(sorted_requests, state->requests, state->num_requests * sizeof(int));
+
+    // Sort the requests array
+    qsort(sorted_requests, state->num_requests, sizeof(int), compare);
+
+    // Open a file to write the positions
+    FILE *file = fopen("disk_scheduling.dat", "w");
+    if (file == NULL) {
+        perror("Unable to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    // Write the initial head position to the file
+    fprintf(file, "0 %d\n", current_position);
+    visited[current_position] = 1;
+
+    // Find the first request greater than or equal to the current head position
+    int head_index = 0;
+    while (head_index < state->num_requests && sorted_requests[head_index] < current_position) {
+        head_index++;
+    }
+
+    int request_number = 1;
+
+    // Process requests in the upward direction (towards higher cylinder numbers)
+    for (int i = head_index; i < state->num_requests; i++) {
+        if (!visited[sorted_requests[i]]) {
+            total_head_movement += abs(sorted_requests[i] - current_position);
+            current_position = sorted_requests[i];
+            // Write the new head position to the file with request number
+            fprintf(file, "%d %d\n", request_number, current_position);
+            visited[current_position] = 1;
+            request_number++;
+        }
+    }
+
+    // Move the head to the maximum cylinder, if needed
+    if (current_position < MAX_CYLINDER - 1) {
+        total_head_movement += (MAX_CYLINDER - 1) - current_position;
+        current_position = MAX_CYLINDER - 1;
+        fprintf(file, "%d %d\n", request_number, current_position);
+        request_number++;
+    }
+
+    // Move the head to the start of the disk (cylinder 0)
+    total_head_movement += current_position; // current_position is now MAX_CYLINDER - 1
+    current_position = 0;
+    fprintf(file, "%d %d\n", request_number, current_position);
+    request_number++;
+
+    // Continue processing requests from the beginning up to the original head position
+    for (int i = 0; i < head_index; i++) {
+        if (!visited[sorted_requests[i]]) {
+            total_head_movement += abs(sorted_requests[i] - current_position);
+            current_position = sorted_requests[i];
+            // Write the new head position to the file with request number
+            fprintf(file, "%d %d\n", request_number, current_position);
+            visited[current_position] = 1;
+            request_number++;
+        }
+    }
+
+    free(sorted_requests);
+    fclose(file);
+
+    // Write the total head movement to a separate file
+    file = fopen("total_movement.txt", "w");
+    if (file != NULL) {
+        fprintf(file, "%d", total_head_movement);
+        fclose(file);
+    }
+    return calculate_metrics(state, total_head_movement);
 }
