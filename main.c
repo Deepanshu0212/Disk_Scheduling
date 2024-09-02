@@ -22,7 +22,7 @@ int main(){
 
     plot_results("sstf","disk_scheduling.png");
 
-    
+    free(ds.requests);
 
     printf("Graph has been generated as disk_scheduling.png\n");
 

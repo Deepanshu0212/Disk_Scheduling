@@ -424,3 +424,31 @@ PerformanceMetrics clook(DiskState *state) {
     }
     return calculate_metrics(state, total_head_movement);
 }
+
+ 
+
+ // Description of each Algorithm:-
+void fcfs_description() {
+    printf("FCFS: First-Come, First-Served - Processes requests in the order they arrive, regardless of their location on the disk.\n");
+}
+
+void sstf_description() {
+    printf("SSTF: Shortest Seek Time First - Selects the request with the shortest seek time from the current head position, minimizing the total head movement.\n");
+}
+
+void scan_description() {
+    printf("SCAN: Elevator Algorithm - Moves the disk arm across the disk, servicing requests in one direction until it reaches the end, then reverses direction and services requests on the way back.\n");
+}
+
+void cscan_description() {
+    printf("C-SCAN: Circular SCAN - Moves the disk arm in one direction, servicing requests until it reaches the end, then jumps back to the beginning without servicing requests on the return trip.\n");
+}
+
+void look_description() {
+    printf("LOOK: Similar to SCAN, but only moves as far as the last request in each direction, then reverses direction, avoiding unnecessary movement to the disk's ends.\n");
+}
+
+void clook_description() {
+    printf("C-LOOK: Circular LOOK - Similar to C-SCAN, but only moves as far as the last request in one direction, then jumps back to the beginning, avoiding unnecessary movement.\n");
+}
+
