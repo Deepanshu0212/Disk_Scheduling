@@ -1,5 +1,17 @@
 #include "Disk_Scheduling.h"
 
+// randomly generate all the requests
+void generate_random_requests(DiskState *state, int num_requests) {
+    srand(time(NULL));
+    state->num_requests = num_requests;
+    state->requests = (int *)malloc(num_requests * sizeof(int));
+    for (int i = 0; i < num_requests; i++) {
+        state->requests[i] = rand() % (MAX_CYLINDER + 1);
+    }
+    state->head_position = rand() % (MAX_CYLINDER + 1);
+}
+
+// calculate the metrics of each algorithm
 PerformanceMetrics calculate_metrics(DiskState* state, int total_head_movement) {
     PerformanceMetrics metrics;
     metrics.total_head_movement = total_head_movement;
