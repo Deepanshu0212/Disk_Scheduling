@@ -42,8 +42,8 @@ void look_description();
 void clook_description();
 
 // Function for calculating metrics
-
 PerformanceMetrics calculate_metrics(DiskState* , int total_head_mov);
+
 // Function for ploting graph
 void plot_results(char *algorithm_name, char* output_file);
 
