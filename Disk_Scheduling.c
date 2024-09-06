@@ -9,6 +9,7 @@ void generate_random_requests(DiskState *state, int num_requests) {
         state->requests[i] = rand() % (MAX_CYLINDER + 1);
     }
     state->head_position = rand() % (MAX_CYLINDER + 1);
+
 }
 
 // calculate the metrics of each algorithm
@@ -66,8 +67,15 @@ void plot_results(char* algorithm, char* output_file) {
 
     fclose(fp);
 
-    system("gnuplot disk_scheduling.plt");
-
+    int result = system("gnuplot disk_scheduling.plt");
+    if (result == -1) {
+    perror("Error executing gnuplot \n");
+    } else if (result != 0) {
+    fprintf(stderr, "gnuplot returned error: %d\n", result);
+    }
+    else{
+        printf("Plot generated!\n");
+    } 
 }
 
 

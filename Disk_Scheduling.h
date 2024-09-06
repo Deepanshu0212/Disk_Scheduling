@@ -50,4 +50,14 @@ void plot_results(char *algorithm_name, char* output_file);
 // Function for random generation of inputs
 void generate_random_requests(DiskState *state, int num_requests);
 
+// functions to run test_cases
+void test_fcfs();
+void test_sstf();
+void test_scan();
+void test_cscan();
+void test_look();
+void test_clook();
+void test_edge_cases();
+
+
 #endif

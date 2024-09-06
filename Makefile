@@ -1,23 +1,31 @@
 # Compiler to use
 CC = gcc
+
 # Compiler flags
 CFLAGS = -Wall -Wextra
 
 # Default target
 all: disk_scheduler
 
-# Rule to create the static library
-libdisk_scheduling.a: Disk_Scheduling.o
-	ar rcs libdisk_scheduling.a Disk_Scheduling.o
+# Object files
+OBJ = Disk_Scheduling.o test.o main.o
 
-# Rule to compile Disk_Scheduling.c into an object file
+# Rule to create the executable
+disk_scheduler: $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Rule to compile Disk_Scheduling.c
 Disk_Scheduling.o: Disk_Scheduling.c Disk_Scheduling.h
-	$(CC) $(CFLAGS) -c Disk_Scheduling.c
+	$(CC) $(CFLAGS) -c $<
 
-# Rule to compile and link the main program
-disk_scheduler: main.c libdisk_scheduling.a
-	$(CC) $(CFLAGS) main.c -L. -ldisk_scheduling -o disk_scheduler
+# Rule to compile test_case.c
+test_case.o: test.c Disk_Scheduling.h
+	$(CC) $(CFLAGS) -c $<
+
+# Rule to compile main.c
+main.o: main.c Disk_Scheduling.h
+	$(CC) $(CFLAGS) -c $<
 
 # Clean up built files
 clean:
-	rm -f *.o *.a disk_scheduler
+	rm -f *.o disk_scheduler
