@@ -1,5 +1,4 @@
-#include "Disk_Scheduling.h"
-
+#include "../Header/Disk_Scheduling.h"
 // randomly generate all the requests
 void generate_random_requests(DiskState *state, int num_requests) {
     srand(time(NULL));
@@ -47,7 +46,7 @@ PerformanceMetrics calculate_metrics(DiskState* state, int total_head_movement) 
     return metrics;
 }
 void plot_results(char* algorithm, char* output_file) {
-    FILE *fp = fopen("disk_scheduling.plt", "w");
+    FILE *fp = fopen("Information/disk_scheduling.plt", "w");
     if (fp == NULL) {
         printf("Error opening file!\n");
         return;
@@ -63,11 +62,11 @@ void plot_results(char* algorithm, char* output_file) {
     fprintf(fp, "set ytic 50\n");
     fprintf(fp, "total_movement = system('type total_movement.txt')\n");
     fprintf(fp, "set label sprintf('Total Movement: %%s', total_movement) at graph 0.02, graph 0.98 font ',10' tc rgb 'black'\n");
-    fprintf(fp, "plot 'disk_scheduling.dat' with linespoints title 'Head Movement' lt rgb 'green' pt 7 ps 1\n");
+    fprintf(fp, "plot 'Information/disk_scheduling.dat' with linespoints title 'Head Movement' lt rgb 'green' pt 7 ps 1\n");
 
     fclose(fp);
 
-    int result = system("gnuplot disk_scheduling.plt");
+    int result = system("gnuplot Information/disk_scheduling.plt");
     if (result == -1) {
     perror("Error executing gnuplot \n");
     } else if (result != 0) {
@@ -83,7 +82,7 @@ void plot_results(char* algorithm, char* output_file) {
 // Fcfs algo...
 PerformanceMetrics fcfs(DiskState *state){
 
-    FILE *fp = fopen("disk_scheduling.dat", "w");
+    FILE *fp = fopen("Information/disk_scheduling.dat", "w");
     // if (fp == NULL) {
     //     printf("Error opening file!\n");
     //     return ;
@@ -103,7 +102,7 @@ PerformanceMetrics fcfs(DiskState *state){
 
     fclose(fp);
     
-    fp = fopen("total_movement.txt", "w");
+    fp = fopen("Information/total_movement.txt", "w");
     if (fp != NULL) {
         fprintf(fp, "%d", total_head_mov);
         fclose(fp);
@@ -115,7 +114,7 @@ PerformanceMetrics fcfs(DiskState *state){
 
 // sstf Algo implementation...
 PerformanceMetrics sstf(DiskState *state){
-    FILE *fp = fopen("disk_scheduling.dat", "w");
+    FILE *fp = fopen("Information/disk_scheduling.dat", "w");
     
 
     int visited[MAX_REQUESTS] = {0};
@@ -146,7 +145,7 @@ PerformanceMetrics sstf(DiskState *state){
     fclose(fp);
 
     // Save total movement to a separate file
-    fp = fopen("total_movement.txt", "w");
+    fp = fopen("Information/total_movement.txt", "w");
     if (fp != NULL) {
         fprintf(fp, "%d", total_head_mov);
         fclose(fp);
@@ -175,7 +174,7 @@ PerformanceMetrics scan(DiskState *state) {
     qsort(sorted_requests, state->num_requests, sizeof(int), compare);
 
     // Open a file to write the positions
-    FILE *file = fopen("disk_scheduling.dat", "w");
+    FILE *file = fopen("Information/disk_scheduling.dat", "w");
     if (file == NULL) {
         perror("Unable to open file");
         exit(EXIT_FAILURE);
@@ -222,7 +221,7 @@ PerformanceMetrics scan(DiskState *state) {
     fclose(file);
 
     // Write the total head movement to a separate file
-    file = fopen("total_movement.txt", "w");
+    file = fopen("Information/total_movement.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d", total_head_movement);
         fclose(file);
@@ -243,7 +242,7 @@ PerformanceMetrics cscan(DiskState *state) {
     qsort(sorted_requests, state->num_requests, sizeof(int), compare);
 
     // Open a file to write the positions
-    FILE *file = fopen("disk_scheduling.dat", "w");
+    FILE *file = fopen("Information/disk_scheduling.dat", "w");
     if (file == NULL) {
         perror("Unable to open file");
         exit(EXIT_FAILURE);
@@ -296,7 +295,7 @@ PerformanceMetrics cscan(DiskState *state) {
     fclose(file);
 
     // Write the total head movement to a separate file
-    file = fopen("total_movement.txt", "w");
+    file = fopen("Information/total_movement.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d", total_head_movement);
         fclose(file);
@@ -316,7 +315,7 @@ PerformanceMetrics look(DiskState *state) {
     qsort(sorted_requests, state->num_requests, sizeof(int), compare);
 
     // Open a file to write the positions
-    FILE *file = fopen("disk_scheduling.dat", "w");
+    FILE *file = fopen("Information/disk_scheduling.dat", "w");
     if (file == NULL) {
         perror("Unable to open file");
         exit(EXIT_FAILURE);
@@ -355,7 +354,7 @@ PerformanceMetrics look(DiskState *state) {
     fclose(file);
 
     // Write the total head movement to a separate file
-    file = fopen("total_movement.txt", "w");
+    file = fopen("Information/total_movement.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d", total_head_movement);
         fclose(file);
@@ -377,7 +376,7 @@ PerformanceMetrics clook(DiskState *state) {
     qsort(sorted_requests, state->num_requests, sizeof(int), compare);
 
     // Open a file to write the positions
-    FILE *file = fopen("disk_scheduling.dat", "w");
+    FILE *file = fopen("Information/disk_scheduling.dat", "w");
     if (file == NULL) {
         perror("Unable to open file");
         exit(EXIT_FAILURE);
@@ -425,7 +424,7 @@ PerformanceMetrics clook(DiskState *state) {
     fclose(file);
 
     // Write the total head movement to a separate file
-    file = fopen("total_movement.txt", "w");
+    file = fopen("Information/total_movement.txt", "w");
     if (file != NULL) {
         fprintf(file, "%d", total_head_movement);
         fclose(file);

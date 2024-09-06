@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "Disk_Scheduling.h"
+#include "../Header/Disk_Scheduling.h"
 
 void test_fcfs() {
     DiskState state;
@@ -16,7 +16,7 @@ void test_fcfs() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("FCFS Test passed!\n");
 
-    plot_results("FCFS","Disk_scheduling.png");
+    plot_results("FCFS","Information/Disk_scheduling.png");
 }
 
 void test_sstf() {
@@ -34,7 +34,7 @@ void test_sstf() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("SSTF Test passed!\n");
 
-    plot_results("SSTF","Disk_scheduling.png");
+    plot_results("SSTF","Information/Disk_scheduling.png");
 }
 
 void test_scan() {
@@ -52,7 +52,7 @@ void test_scan() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("SCAN Test passed!\n");
 
-    plot_results("SCAN","Disk_scheduling.png");
+    plot_results("SCAN","Information/Disk_scheduling.png");
     
 }
 
@@ -71,7 +71,7 @@ void test_cscan() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("C-SCAN Test passed!\n");
 
-    plot_results("C_SCAN","Disk_scheduling.png");
+    plot_results("C_SCAN","Information/Disk_scheduling.png");
 
 }
 
@@ -90,7 +90,7 @@ void test_look() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("LOOK Test passed!\n");
 
-    plot_results("LOOK","Disk_scheduling.png");
+    plot_results("LOOK","Information/Disk_scheduling.png");
 }
 
 void test_clook() {
@@ -108,7 +108,7 @@ void test_clook() {
     assert(metrics.total_head_movement == expected_total_head_movement);
     printf("C-LOOK Test passed!\n");
 
-    plot_results("C_LOOK","Disk_scheduling.png");
+    plot_results("C_LOOK","Information/Disk_scheduling.png");
 }
 
 void test_edge_cases() {

@@ -1,4 +1,4 @@
-#include "Disk_Scheduling.h"
+#include "../Header/Disk_Scheduling.h"
 
 typedef PerformanceMetrics (*DiskSchedulingAlgo)(DiskState*);
 
@@ -52,6 +52,8 @@ void handle_algorithm(DiskSchedulingAlgo algo, char* algo_name, DiskState* state
     printf("Average Waiting Time: %.2f\n", metrics.avg_waiting_time);
     printf("Throughput: %.2f\n", metrics.throughput);
     printf("Standard Deviation of Response Time: %.2f\n", metrics.std_dev_response_time);
+
+    plot_results("FCFS","Information/Disk_scheduling.png");
     
 }
 

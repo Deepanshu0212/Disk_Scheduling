@@ -6,12 +6,13 @@ This project implements various disk scheduling algorithms in C. The goal of dis
 - [Disk Scheduling Algorithms](#disk-scheduling-algorithms)
   - [Table of Contents](#table-of-contents)
   - [Implemented Algorithms](#implemented-algorithms)
-  - [Structure](#structure)
+  - [Direwctory Structure](#structure)
   - [Features](#features)
   - [Usage](#usage)
   - [Performance Metrics](#performance-metrics)
   - [Testing](#testing)
   - [How to Run](#how-to-run)
+  - [Dependencies](#dependencies)
 
 ## Implemented Algorithms
 The following disk scheduling algorithms are implemented:
@@ -24,15 +25,26 @@ The following disk scheduling algorithms are implemented:
 
 Each algorithm has its own description function to explain the approach used and the sequence of operations.
 
-## Structure
 
-The project is divided into the following key files:
+## Directory Structure
 
-- **`Disk_Scheduling.h`**: Header file containing the function prototypes and data structures.
-- **`Disk_Scheduling.c`**: Each disk scheduling algorithm (FCFS, SSTF, SCAN, etc.) is implemented in separate C files.
-- **`main.c`**: Main file that integrates user interaction, function calls, and testing.
-- **`test.c`**: Various test cases are written to verify each algorithm against expected outputs.
+- **Header**:
+  - `Disk_Scheduling.h`: Header file containing the function prototypes and data structures.
 
+- **Implementation**:
+  - `Disk_Scheduling.c`: Contains the implementation of disk scheduling algorithms.
+  - `main.c`: Integrates user interaction, function calls, and testing.
+
+- **Test**:
+  - `test.c`: Contains various test cases to verify each algorithm against expected outputs.
+
+- **bin**:
+  - Contains binary executable files generated from the source code.
+
+- **Information** :
+  - All content like total movement , plot in form of .png file will be generated in this folder
+
+  
 ## Features
 
 - **Multiple Algorithms**: Six different disk scheduling algorithms to choose from.
@@ -48,8 +60,8 @@ The project is divided into the following key files:
 3. **Performance Metrics**: The program calculates key performance metrics for each algorithm.
 4. **Graph Plotting**: Results are saved in a file and can be visualized graphically.
 
-## Performance Metrics
 
+## Performance Metrics
 The following performance metrics are calculated for each algorithm:
 - **Total Head Movement**: The total number of cylinder movements the disk head makes.
 - **Average Waiting Time**: The average time each request waits before being served.
@@ -57,7 +69,6 @@ The following performance metrics are calculated for each algorithm:
 - **Standard Deviation of Response Time**: A measure of the variability in response times.
 
 ## Testing
-
 This project includes unit tests for each algorithm to verify the correctness of the implementation. Test cases are defined in separate functions to ensure algorithms handle both typical and edge case scenarios. These include:
 - FCFS
 - SSTF
@@ -74,7 +85,7 @@ To run the tests, simply call the appropriate test function in `main.c`.
 
 ### Clone the repository
 ``` bash
-git clone https://github.com/yourusername/Disk_Scheduling.git
+git clone https://github.com/Deepanshu0212/Disk_Scheduling.git
 ```
 
 ### Change Directory
@@ -85,16 +96,30 @@ cd Disk_Scheduling
 ### For Windows (Using Mingw)
 ``` bash
 mingw32-make
-./disk_scheduler
+./bin/disk_scheduler
 mingw32-make clean
 ```
 
 ### For Linux
 ``` bash
 make
-./disk_scheduler
+./bin/disk_scheduler
 make clean
 ```
 
+## Dependencies
 
+### Windows
+
+ **Gnuplot**:
+   - Download the latest version of Gnuplot for Windows from the [official Gnuplot website](http://www.gnuplot.info/download.html).
+   - Follow the installer instructions to complete the installation.
+   - Ensure that the `bin` directory of Gnuplot is added to your system's `PATH` environment variable.
+
+### Linux
+
+``` bash
+     sudo apt-get update
+     sudo apt-get install gnuplot
+```
 
