@@ -12,8 +12,6 @@ This project implements various disk scheduling algorithms in C. The goal of dis
   - [Performance Metrics](#performance-metrics)
   - [Testing](#testing)
   - [How to Run](#how-to-run)
-  - [Contributing](#contributing)
-  - [License](#license)
 
 ## Implemented Algorithms
 The following disk scheduling algorithms are implemented:
@@ -75,6 +73,7 @@ To run the tests, simply call the appropriate test function in `main.c`.
 ## How to run
 
 # Clone the repository
+``` bash
 git clone https://github.com/yourusername/Disk_Scheduling.git
 cd Disk_Scheduling
 
@@ -89,6 +88,7 @@ mingw32-make clean
 make
 ./disk_scheduler
 make clean
+
 
 
 
