@@ -6,7 +6,7 @@ This project implements various disk scheduling algorithms in C. The goal of dis
 - [Disk Scheduling Algorithms](#disk-scheduling-algorithms)
   - [Table of Contents](#table-of-contents)
   - [Implemented Algorithms](#implemented-algorithms)
-  - [Direwctory Structure](#structure)
+  - [Directory Structure](#structure)
   - [Features](#features)
   - [Usage](#usage)
   - [Performance Metrics](#performance-metrics)
@@ -28,23 +28,23 @@ Each algorithm has its own description function to explain the approach used and
 
 ## Directory Structure
 
-- **Header**:
+- **[Header](Disk_Scheduling.h)**:
   - `Disk_Scheduling.h`: Header file containing the function prototypes and data structures.
 
-- **Implementation**:
-  - `Disk_Scheduling.c`: Contains the implementation of disk scheduling algorithms.
-  - `main.c`: Integrates user interaction, function calls, and testing.
+- **[Implementation](Implementation)**:
+  - [Disk_Scheduling.c](Implementation/Disk_Scheduling.c): Contains the implementation of disk scheduling algorithms.
+  - [main.c](Implementation/main.c): Integrates user interaction, function calls, and testing.
 
-- **Test**:
-  - `test.c`: Contains various test cases to verify each algorithm against expected outputs.
+- **[Test](Test)**:
+  - [test.c](Test/test.c): Contains various test cases to verify each algorithm against expected outputs.
 
-- **bin**:
+- **[bin](bin)**:
   - Contains binary executable files generated from the source code.
 
-- **Information** :
-  - All content like total movement , plot in form of .png file will be generated in this folder
+- **[Information](Information)**:
+  - All content like total movement, plots in the form of `.png` files will be generated in this folder.
 
-  
+
 ## Features
 
 - **Multiple Algorithms**: Six different disk scheduling algorithms to choose from.
