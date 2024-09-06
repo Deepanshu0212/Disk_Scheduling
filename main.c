@@ -181,7 +181,10 @@ void get_user_inputs(DiskState* state) {
 int main() {
     DiskState state;
     int main_choice;
-
+    
+    printf("Welcome to the Disk Scheduling Algorithm Simulator!\n");
+    printf("This program allows you to simulate various disk scheduling algorithms.\n");
+    
     do {
         display_main_menu();
         main_choice = get_choice(0, 2);

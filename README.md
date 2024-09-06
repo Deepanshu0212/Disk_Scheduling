@@ -30,10 +30,10 @@ Each algorithm has its own description function to explain the approach used and
 
 The project is divided into the following key files:
 
-- **`disk_scheduling.h`**: Header file containing the function prototypes and data structures.
-- **Algorithm-specific C files**: Each disk scheduling algorithm (FCFS, SSTF, SCAN, etc.) is implemented in separate C files.
+- **`Disk_Scheduling.h`**: Header file containing the function prototypes and data structures.
+- **`Disk_Scheduling.c`**: Each disk scheduling algorithm (FCFS, SSTF, SCAN, etc.) is implemented in separate C files.
 - **`main.c`**: Main file that integrates user interaction, function calls, and testing.
-- **Test Functions**: Various test cases are written to verify each algorithm against expected outputs.
+- **`test.c`**: Various test cases are written to verify each algorithm against expected outputs.
 
 ## Features
 
@@ -70,5 +70,25 @@ This project includes unit tests for each algorithm to verify the correctness of
 - Edge cases (such as repeated requests)
 
 To run the tests, simply call the appropriate test function in `main.c`.
+
+
+## How to run
+
+# Clone the repository
+git clone https://github.com/yourusername/Disk_Scheduling.git
+cd Disk_Scheduling
+
+# For Windows (Using Mingw)
+
+mingw32-make
+./disk_scheduler
+mingw32-make clean
+
+# For Linux
+
+make
+./disk_scheduler
+make clean
+
 
 

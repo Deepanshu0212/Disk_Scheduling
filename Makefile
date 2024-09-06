@@ -18,7 +18,7 @@ disk_scheduler: $(OBJ)
 Disk_Scheduling.o: Disk_Scheduling.c Disk_Scheduling.h
 	$(CC) $(CFLAGS) -c $<
 
-# Rule to compile test_case.c
+# Rule to compile test.c
 test_case.o: test.c Disk_Scheduling.h
 	$(CC) $(CFLAGS) -c $<
 
