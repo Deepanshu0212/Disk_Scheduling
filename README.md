@@ -28,8 +28,8 @@ Each algorithm has its own description function to explain the approach used and
 
 ## Directory Structure
 
-- **[Header](Disk_Scheduling.h)**:
-  - `Disk_Scheduling.h`: Header file containing the function prototypes and data structures.
+- **[Header](Header)**:
+  - [Disk_Scheduling.h](Header/Disk_Scheduling.h): Header file containing the function prototypes and data structures.
 
 - **[Implementation](Implementation)**:
   - [Disk_Scheduling.c](Implementation/Disk_Scheduling.c): Contains the implementation of disk scheduling algorithms.
