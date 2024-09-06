@@ -72,23 +72,29 @@ To run the tests, simply call the appropriate test function in `main.c`.
 
 ## How to run
 
-# Clone the repository
+### Clone the repository
 ``` bash
 git clone https://github.com/yourusername/Disk_Scheduling.git
+```
+
+### Change Directory
+``` bash
 cd Disk_Scheduling
+```
 
-# For Windows (Using Mingw)
-
+### For Windows (Using Mingw)
+``` bash
 mingw32-make
 ./disk_scheduler
 mingw32-make clean
+```
 
-# For Linux
-
+### For Linux
+``` bash
 make
 ./disk_scheduler
 make clean
-
+```
 
 
 
