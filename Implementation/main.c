@@ -32,16 +32,22 @@ void display_test_menu() {
     printf("0. Exit\n");
 }
 
+#include <stdio.h>
+
 int get_choice(int min, int max) {
     int choice;
-    do {
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+    int scan_result;
 
-        if (choice < min || choice > max) {
-            printf("Invalid choice. Please enter a number between %d and %d.\n", min, max);
+    do {
+        printf("Enter your choice (%d-%d): ", min, max);
+        scan_result = scanf("%d", &choice);
+
+        if (scan_result != 1 || choice < min || choice > max) {
+            printf("Invalid input. Please enter a number between %d and %d.\n", min, max);
+            while (getchar() != '\n'); // Clear input buffer
         }
-    } while (choice < min || choice > max);
+    } while (scan_result != 1 || choice < min || choice > max);
+
     return choice;
 }
 
@@ -129,17 +135,21 @@ void run_test_cases() {
     } while (test_choice != 0);
 }
 
+
 void get_user_inputs(DiskState* state) {
     int num_requests;
+    int scan_result;
 
     // Get number of requests
     do {
         printf("Enter the number of disk requests (max %d): ", MAX_REQUESTS);
-        scanf("%d", &num_requests);
-        if (num_requests < 1 || num_requests > MAX_REQUESTS) {
-            printf("Invalid number of requests. Please enter a value between 1 and %d.\n", MAX_REQUESTS);
+        scan_result = scanf("%d", &num_requests);
+
+        if (scan_result != 1 || num_requests < 1 || num_requests > MAX_REQUESTS) {
+            printf("Invalid input. Please enter a number between 1 and %d.\n", MAX_REQUESTS);
+            while (getchar() != '\n'); // Clear input buffer
         }
-    } while (num_requests < 1 || num_requests > MAX_REQUESTS);
+    } while (scan_result != 1 || num_requests < 1 || num_requests > MAX_REQUESTS);
 
     state->num_requests = num_requests;
     state->requests = (int*)malloc(num_requests * sizeof(int));
@@ -147,21 +157,25 @@ void get_user_inputs(DiskState* state) {
     // Input validation for head position
     do {
         printf("Enter the current head position (0 to %d): ", MAX_CYLINDER);
-        scanf("%d", &state->head_position);
-        if (state->head_position < 0 || state->head_position > MAX_CYLINDER) {
-            printf("Invalid head position. Please enter a value between 0 and %d.\n", MAX_CYLINDER);
+        scan_result = scanf("%d", &state->head_position);
+
+        if (scan_result != 1 || state->head_position < 0 || state->head_position > MAX_CYLINDER) {
+            printf("Invalid input. Please enter a number between 0 and %d.\n", MAX_CYLINDER);
+            while (getchar() != '\n'); // Clear input buffer
         }
-    } while (state->head_position < 0 || state->head_position > MAX_CYLINDER);
+    } while (scan_result != 1 || state->head_position < 0 || state->head_position > MAX_CYLINDER);
 
     // Ask if random requests should be generated
     int random_choice;
     do {
         printf("Do you want to generate random requests? (1 for Yes, 0 for No): ");
-        scanf("%d", &random_choice);
-        if (random_choice != 0 && random_choice != 1) {
-            printf("Invalid choice. Please enter 1 for Yes or 0 for No.\n");
+        scan_result = scanf("%d", &random_choice);
+
+        if (scan_result != 1 || (random_choice != 0 && random_choice != 1)) {
+            printf("Invalid input. Please enter 1 for Yes or 0 for No.\n");
+            while (getchar() != '\n'); // Clear input buffer
         }
-    } while (random_choice != 0 && random_choice != 1);
+    } while (scan_result != 1 || (random_choice != 0 && random_choice != 1));
 
     if (random_choice == 1) {
         generate_random_requests(state, num_requests);
@@ -171,14 +185,17 @@ void get_user_inputs(DiskState* state) {
         for (int i = 0; i < num_requests; i++) {
             do {
                 printf("Request %d: ", i + 1);
-                scanf("%d", &state->requests[i]);
-                if (state->requests[i] < 0 || state->requests[i] > MAX_CYLINDER) {
-                    printf("Invalid request. Please enter a value between 0 and %d.\n", MAX_CYLINDER);
+                scan_result = scanf("%d", &state->requests[i]);
+
+                if (scan_result != 1 || state->requests[i] < 0 || state->requests[i] > MAX_CYLINDER) {
+                    printf("Invalid input. Please enter a number between 0 and %d.\n", MAX_CYLINDER);
+                    while (getchar() != '\n'); // Clear input buffer
                 }
-            } while (state->requests[i] < 0 || state->requests[i] > MAX_CYLINDER);
+            } while (scan_result != 1 || state->requests[i] < 0 || state->requests[i] > MAX_CYLINDER);
         }
     }
 }
+
 
 int main() {
     DiskState state;

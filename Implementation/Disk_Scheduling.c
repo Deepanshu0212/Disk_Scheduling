@@ -7,7 +7,6 @@ void generate_random_requests(DiskState *state, int num_requests) {
     for (int i = 0; i < num_requests; i++) {
         state->requests[i] = rand() % (MAX_CYLINDER + 1);
     }
-    state->head_position = rand() % (MAX_CYLINDER + 1);
 
 }
 
@@ -45,13 +44,35 @@ PerformanceMetrics calculate_metrics(DiskState* state, int total_head_movement) 
     free(waiting_times);
     return metrics;
 }
+
 void plot_results(char* algorithm, char* output_file) {
-    FILE *fp = fopen("Information/disk_scheduling.plt", "w");
+    FILE *fp;
+    char total_movement[256];
+
+    // Read total movement from the file
+    FILE *movement_file = fopen("Information/total_movement.txt", "r");
+    if (movement_file == NULL) {
+        printf("Error opening total_movement.txt!\n");
+        return;
+    }
+    if (fgets(total_movement, sizeof(total_movement), movement_file) == NULL) {
+        printf("Error reading total_movement.txt!\n");
+        fclose(movement_file);
+        return;
+    }
+    fclose(movement_file);
+    
+    // Remove newline character if present
+    total_movement[strcspn(total_movement, "\n")] = '\0';
+
+    // Open the Gnuplot script file
+    fp = fopen("Information/disk_scheduling.plt", "w");
     if (fp == NULL) {
-        printf("Error opening file!\n");
+        printf("Error opening Gnuplot script file!\n");
         return;
     }
 
+    // Write Gnuplot commands
     fprintf(fp, "set terminal png\n");
     fprintf(fp, "set output '%s'\n", output_file);
     fprintf(fp, "set title '%s Disk Scheduling'\n", algorithm);
@@ -60,22 +81,22 @@ void plot_results(char* algorithm, char* output_file) {
     fprintf(fp, "set yrange [0:199]\n");
     fprintf(fp, "set grid ytics\n");
     fprintf(fp, "set ytic 50\n");
-    fprintf(fp, "total_movement = system('type total_movement.txt')\n");
-    fprintf(fp, "set label sprintf('Total Movement: %%s', total_movement) at graph 0.02, graph 0.98 font ',10' tc rgb 'black'\n");
-    fprintf(fp, "plot 'Information/disk_scheduling.dat' with linespoints title 'Head Movement' lt rgb 'green' pt 7 ps 1\n");
+    fprintf(fp, "set label sprintf('Total Movement: %s', '%s') at graph 0.02, graph 0.98 font ',10' tc rgb 'black'\n", total_movement, total_movement);
+    fprintf(fp, "plot 'Information/disk_scheduling.dat' with linespoints title 'Total Movement' lt rgb 'green' pt 7 ps 1\n");
 
     fclose(fp);
 
+    // Execute the Gnuplot script
     int result = system("gnuplot Information/disk_scheduling.plt");
     if (result == -1) {
-    perror("Error executing gnuplot \n");
+        perror("Error executing gnuplot\n");
     } else if (result != 0) {
-    fprintf(stderr, "gnuplot returned error: %d\n", result);
-    }
-    else{
+        fprintf(stderr, "gnuplot returned error: %d\n", result);
+    } else {
         printf("Plot generated!\n");
-    } 
+    }
 }
+
 
 
 
