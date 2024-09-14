@@ -14,33 +14,60 @@ void generate_random_requests(DiskState *state, int num_requests) {
 PerformanceMetrics calculate_metrics(DiskState* state, int total_head_movement) {
     PerformanceMetrics metrics;
     metrics.total_head_movement = total_head_movement;
+
+    // Read the processed order from "Information/disk_scheduling.dat"
+    FILE *fp = fopen("Information/disk_scheduling.dat", "r");
+    if (fp == NULL) {
+        fprintf(stderr, "Error opening disk scheduling data file.\n");
+        exit(1);
+    }
+
+    int current_position;
+    int time_step;
+    int processed_requests[MAX_REQUESTS];
+    int num_processed = 0;
+
+    // Skip the first line (initial head position logging)
+    fscanf(fp, "%d %d", &time_step, &current_position);
+
+    // Read the actual processed order into the array
+    while (fscanf(fp, "%d %d", &time_step, &processed_requests[num_processed]) != EOF) {
+        num_processed++;
+    }
     
+    fclose(fp);
+
+    // Now calculate the metrics based on the processed order
     int total_waiting_time = 0;
     int* waiting_times = malloc(state->num_requests * sizeof(int));
     int current_time = 0;
-    int current_position = state->head_position;
-    
-    for (int i = 0; i < state->num_requests; i++) {
-        int seek_time = abs(state->requests[i] - current_position);
+    current_position = state->head_position; // Start from the initial head position
+
+    for (int i = 0; i < num_processed; i++) {
+        int seek_time = abs(processed_requests[i] - current_position);
         current_time += seek_time;
         waiting_times[i] = current_time;
         total_waiting_time += waiting_times[i];
-        current_position = state->requests[i];
+        current_position = processed_requests[i];
     }
+
+    // Calculate average waiting time
+    metrics.avg_waiting_time = (double)total_waiting_time / num_processed;
     
-    metrics.avg_waiting_time = (double)total_waiting_time / state->num_requests;
-    metrics.throughput = (double)state->num_requests / current_time;
-    
+    // Calculate throughput
+    metrics.throughput = (double)num_processed / current_time;
+
+    // Calculate standard deviation of response time
     double mean_response_time = metrics.avg_waiting_time;
     double sum_squared_diff = 0;
-    
-    for (int i = 0; i < state->num_requests; i++) {
+
+    for (int i = 0; i < num_processed; i++) {
         double diff = waiting_times[i] - mean_response_time;
         sum_squared_diff += diff * diff;
     }
-    
-    metrics.std_dev_response_time = sqrt(sum_squared_diff / state->num_requests);
-    
+
+    metrics.std_dev_response_time = sqrt(sum_squared_diff / num_processed);
+
     free(waiting_times);
     return metrics;
 }
